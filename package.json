@@ -1,0 +1,28 @@
+{
+  "name": "videojs-wistia",
+  "version": "1.0.0",
+  "description": "Allows you to use Wistia URL as source with Video.js.",
+  "main": "vjs.wistia.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanpatrickcook/videojs-wistia.git"
+  },
+  "scripts": {
+    "dist": "mkdir -p dist && cp src/media.wistia.js dist/media.wistia.js && uglifyjs src/media.wistia.js -o dist/media.wistia.min.js",
+    "build": "uglifyjs src/media.wistia.js -o vjs.wistia.js"
+  },
+  "devDependencies": {
+    "uglify-js": "^2.4.23"
+  },
+  "keywords": [
+    "video.js",
+    "wistia",
+    "plugin"
+  ],
+  "author": "Ryan Cook <ryanpatrickcook@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ryanpatrickcook/videojs-wistia/issues"
+  },
+  "homepage": "https://github.com/ryanpatrickcook/videojs-wistia#readme"
+}
