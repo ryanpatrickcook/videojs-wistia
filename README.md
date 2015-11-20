@@ -26,3 +26,9 @@ Here is an example of how to use with Javascript events:
         console.log("video.js - volumechange");
       });
     });
+
+
+## Supported URLs
+http://fast.wistia.com/embed/iframe/:id
+
+http://home.wistia.com/medias/:id
