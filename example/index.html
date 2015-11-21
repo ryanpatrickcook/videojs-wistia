@@ -4,7 +4,7 @@
   <link href="../lib/video-js.min.css" rel="stylesheet" />
 </head>
 <body style="background-color: #eee;">
-  <video id="vid1" muted="muted" src="" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360" data-setup='{ "techOrder": ["wistia"], "src": "https://home.wistia.com/medias/e4a27b971d","loop": true,"autoplay": true }'>
+  <video id="vid1" muted="muted" src="" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360" data-setup='{ "techOrder": ["wistia"], "src": "https://home.wistia.com/medias/e4a27b971d","autoplay": true }'>
     <p>Video Playback Not Supported</p>
   </video>
 
@@ -37,6 +37,12 @@
 
     this.on('volumechange', function() {
       console.log("video.js - volumechange");
+    });
+
+    this.one('ended', function() {
+      console.log("video.js - ended");
+      this.src("https://home.wistia.com/medias/oefj398m6q?playerColor=ff0000");
+      this.play();
     });
   });
   </script>
