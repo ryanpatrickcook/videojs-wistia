@@ -42,7 +42,38 @@ videojs.Wistia = videojs.MediaTechController.extend({
     });
     this.player_el_.insertBefore(this.script_el_, this.player_el_.firstChild);
 
-    var src = player.options()['src'];
+    var playerInfo = this.getPlayerInfoFromSrc(this.player_.options()["src"]);
+
+    this.el_ = videojs.Component.prototype.createEl('div', {
+      id: this.id_,
+      className: playerInfo.classString,
+      width: this.player_.options()['width'] || "100%",
+      height: this.player_.options()['height'] || "100%"
+    });
+
+    this.player_el_.insertBefore(this.el_, this.player_el_.firstChild);
+
+    this.baseUrl = protocol + '//fast.wistia.com/embed/iframe/';
+
+    this.wistiaVideo = {};
+    this.wistiaInfo = {};
+
+    var self = this;
+
+    this.script_el_.onload = function() {
+      self.wistiaVideo = Wistia.api(self.videoId);
+      window._wq = window._wq || [];
+
+      var hash = {};
+      hash[self.videoId] = function(video) {
+        self.wistiaVideo = video;
+        self.onLoad();
+      };
+      window._wq.push(hash);
+    };
+  },
+
+  getPlayerInfoFromSrc: function(src) {
     var regExp = /^.*(wistia\.(?:com|net)\/)embed\/iframe\/([\w-]+)/;
     var match = src.match(regExp);
     if(!match) {
@@ -52,11 +83,13 @@ videojs.Wistia = videojs.MediaTechController.extend({
       this.videoId = match[2];
     }
 
-    var options = [];
-    options.push("vjs-tech");
-    options.push("wistia_embed");
-    options.push("wistia_async_" + this.videoId);
-    options.push("wmode=transparent");
+    var classes = [];
+    classes.push("vjs-tech");
+    classes.push("wistia_embed");
+    classes.push("wistia_async_" + this.videoId);
+
+    var options = {};
+    options["wmode"] = "transparent";
 
     if(src) {
       var playerColorMatch = src.match(/playerColor=([#a-fA-f0-9]+)/);
@@ -83,46 +116,33 @@ videojs.Wistia = videojs.MediaTechController.extend({
 
     if(this.player_.options()['muted'])
       this.player_.options()['volume'] = 0;
-
     if(this.player_.options()['controls'])
-      options.push("controlsVisibleOnLoad="+this.player_.options()['controls']);
+      options["controlsVisibleOnLoad"] = this.player_.options()['controls'];
     if(this.player_.options()['playerColor'])
-      options.push("playerColor="+this.player_.options()['playerColor']);
+      options["playerColor"] = this.player_.options()['playerColor'];
     if(this.player_.options()['autoplay'])
-      options.push("autoPlay="+this.player_.options()['autoplay']);
-    if(this.player_.options()['volume'])
-      options.push("volume="+this.player_.options()['volume']);
+      options["autoPlay"] = this.player_.options()['autoplay'];
+    if(this.player_.options()['volume'] !== false)
+      options["volume"] = this.player_.options()['volume'];
     if(this.player_.options()['loop'])
       this.player_.options()['endVideoBehavior'] = "loop";
     if(this.player_.options()['endVideoBehavior'])
-      options.push("endVideoBehavior="+this.player_.options()['endVideoBehavior']);
+      options["endVideoBehavior"] = this.player_.options()['endVideoBehavior'];
 
-    this.el_ = videojs.Component.prototype.createEl('div', {
-      id: this.id_,
-      className: options.join(" "),
-      width: this.player_.options()['width'] || "100%",
-      height: this.player_.options()['height'] || "100%"
-    });
+    var keys = Object.keys(options);
+    var classString = classes.join(" ") + " ";
+    for(var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      var value = options[key];
+      classString += key + "=" + value + "&";
+    }
+    classString = classString.replace(/&+$/,'');
 
-    this.player_el_.insertBefore(this.el_, this.player_el_.firstChild);
-
-    this.baseUrl = protocol + '//fast.wistia.com/embed/iframe/';
-
-    this.wistiaVideo = {};
-    this.wistiaInfo = {};
-
-    var self = this;
-
-    this.script_el_.onload = function() {
-      self.wistiaVideo = Wistia.api(self.videoId);
-      window._wq = window._wq || [];
-
-      var hash = {};
-      hash[self.videoId] = function(video) {
-        self.wistiaVideo = video;
-        self.onLoad();
-      };
-      window._wq.push(hash);
+    return {
+      id: this.videoId,
+      classes: classes,
+      classString: classString,
+      options: options
     };
   }
 });
@@ -133,7 +153,10 @@ videojs.Wistia.prototype.dispose = function(){
   videojs.MediaTechController.prototype.dispose.call(this);
 };
 
-videojs.Wistia.prototype.src = function(src){};
+videojs.Wistia.prototype.src = function(src){
+  var playerInfo = this.getPlayerInfoFromSrc(src);
+  this.wistiaVideo.replaceWith(playerInfo.id, playerInfo.options);
+};
 
 videojs.Wistia.prototype.load = function(){};
 
@@ -230,6 +253,10 @@ videojs.Wistia.prototype.onLoad = function(){
 
   this.wistiaVideo.bind("volumechange", function(v) {
     self.setVolume(v);
+  });
+
+  this.wistiaVideo.bind("end", function(t) {
+    self.onFinish();
   });
 };
 
