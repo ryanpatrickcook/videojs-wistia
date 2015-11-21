@@ -1,6 +1,8 @@
 # Video.js - Wistia Source Support
 Allows you to use Wistia URL as source with [Video.js](https://github.com/zencoder/video-js/).
 
+[Example](http://ryanpatrickcook.github.io/videojs-wistia/)
+
 ## How does it work?
 Including the script vjs.wistia.js will add the Wistia as a tech. You just have to add it to your techOrder option. [Wistia Javascript Player API docs](http://wistia.com/doc/player-api).
 
