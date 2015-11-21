@@ -1,5 +1,5 @@
 # Video.js - Wistia Source Support
-Allows you to use Wistia URL as source with [Video.js](https://github.com/zencoder/video-js/).
+Allows you to use Wistia URL as source with [Video.js](https://github.com/videojs/video-js/).
 
 [Example](http://ryanpatrickcook.github.io/videojs-wistia/)
 
