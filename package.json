@@ -1,6 +1,6 @@
 {
   "name": "videojs-wistia",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Allows you to use Wistia URL as source with Video.js.",
   "main": "vjs.wistia.js",
   "repository": {
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dist": "mkdir -p dist && cp src/wistia.js dist/wistia.js && uglifyjs src/wistia.js -o dist/wistia.min.js",
-    "build": "uglifyjs src/wistia.js -o wistia.js"
+    "build": "uglifyjs src/wistia.js -o vjs.wistia.js"
   },
   "devDependencies": {
     "uglify-js": "^2.4.23"
