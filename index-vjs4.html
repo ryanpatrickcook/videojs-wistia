@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="lib/videojs-5/video-js.min.css" rel="stylesheet" />
+  <link href="lib/videojs-4/video-js.min.css" rel="stylesheet" />
 </head>
 <body style="background-color: #eee;">
-  <video id="vid1" muted="muted" src="" class="video-js vjs-default-skin" preload="auto" width="640" height="360" data-setup='{ "techOrder": ["wistia"], "sources": [{ "type": "video/wistia", "src": "https://home.wistia.com/medias/e4a27b971d?autoplay=true" }] }'>
+  <video id="vid1" muted="muted" src="" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360" data-setup='{ "techOrder": ["wistia"], "src": "https://home.wistia.com/medias/e4a27b971d","autoplay": true }'>
     <p>Video Playback Not Supported</p>
   </video>
 
   <br />
 
-  <video id="vid2" src="" class="video-js vjs-default-skin" preload="auto" width="640" height="360">
+  <video id="vid2" src="" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
     <p>Video Playback Not Supported</p>
   </video>
 
-  <script src="lib/videojs-5/video.js"></script>
-  <script src="src/vjs.wistia.js"></script>
+  <script src="lib/videojs-4/video.js"></script>
+  <script src="src/media.wistia.js"></script>
   <script>
   videojs('vid2', {
     "techOrder": ["wistia"],
-    "sources": [{
-      "type": "video/wistia",
-      "src": "http://fast.wistia.com/embed/iframe/b0767e8ebb?version=v1&controlsVisibleOnLoad=false&playerColor=aae3d8"
-    }]
+    "src": "http://fast.wistia.com/embed/iframe/b0767e8ebb?version=v1&controlsVisibleOnLoad=false&playerColor=aae3d8"
   }).ready(function() {
     this.on('pause', function() {
       document.body.style.backgroundColor = '#ffcccc';
