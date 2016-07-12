@@ -5,6 +5,6 @@
   "description": "Allows you to use Wistia URL as source with Video.js.",
   "license": "MIT",
   "dependencies": {
-    "video.js": "~4.10"
+    "video.js": "~5.10"
   }
 }
