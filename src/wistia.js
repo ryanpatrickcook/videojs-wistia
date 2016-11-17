@@ -208,6 +208,19 @@
       return { code: 'Wistia unknown error (' + this.errorNumber + ')' };
     },
 
+    playbackRate: function() {
+      return this.suggestedRate ? this.suggestedRate : 1;
+    },
+
+    setPlaybackRate: function(suggestedRate) {
+      if (!this.wistiaVideo) {
+        return;
+      }
+      var d = this.wistiaVideo.playbackRate(suggestedRate);
+      this.suggestedRate = suggestedRate;
+      this.trigger('ratechange');
+    },
+
     src: function(src) {
       if(src) {
         this.setSrc({ src: src });
