@@ -88,6 +88,10 @@
       };
     },
 
+    ended: function() {
+      return (this.wistiaInfo.state === WistiaState.ENDED)
+    },
+
     onLoad: function() {
       this.wistiaInfo = {
         state: WistiaState.UNSTARTED,
