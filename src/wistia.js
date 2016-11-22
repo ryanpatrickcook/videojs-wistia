@@ -95,7 +95,7 @@
         muted: false,
         muteVolume: 1,
         time: 0,
-        duration: 0,
+        duration: this.wistiaVideo.duration(),
         buffered: 0,
         url: this.baseUrl + this.videoId,
         error: null
@@ -135,6 +135,11 @@
       this.wistiaVideo.bind('end', function(t) {
         self.onFinish();
       });
+
+      this.wistiaVideo.bind('duration', function() {
+        self.duration();
+      });
+
     },
 
     onReady: function(){
@@ -145,6 +150,11 @@
         this.setMuted(true);
         this.startMuted = false;
       }
+    },
+
+    duration: function() {
+      var d = this.wistiaVideo ? this.wistiaVideo.duration() : 0;
+      return d;
     },
 
     onLoadProgress: function(data) {
