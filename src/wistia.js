@@ -89,7 +89,7 @@
     },
 
     ended: function() {
-      return (this.wistiaInfo.state === WistiaState.ENDED)
+      return (this.wistiaInfo.state === WistiaState.ENDED);
     },
 
     onLoad: function() {
@@ -140,10 +140,6 @@
         self.onFinish();
       });
 
-      this.wistiaVideo.bind('duration', function() {
-        self.duration();
-      });
-
     },
 
     onReady: function(){
@@ -154,11 +150,6 @@
         this.setMuted(true);
         this.startMuted = false;
       }
-    },
-
-    duration: function() {
-      var d = this.wistiaVideo ? this.wistiaVideo.duration() : 0;
-      return d;
     },
 
     onLoadProgress: function(data) {
