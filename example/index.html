@@ -4,13 +4,18 @@
   <link href="../lib/video-js.css" rel="stylesheet" />
 </head>
 <body style="background-color: #eee;">
-  <video id="vid1" muted="muted" src="" class="video-js vjs-default-skin" preload="auto" width="640" height="360" data-setup='{ "techOrder": ["wistia"], "sources": [{ "type": "video/wistia", "src": "https://home.wistia.com/medias/e4a27b971d?autoplay=true" }] }'>
+  <video id="vid1" src="" class="video-js vjs-default-skin" preload="auto" width="640" height="360" data-setup='{ "techOrder": ["wistia"], "sources": [{ "type": "video/wistia", "src": "https://home.wistia.com/medias/e4a27b971d?autoplay=true&muted=true" }] }'>
     <p>Video Playback Not Supported</p>
   </video>
 
   <br />
 
   <video id="vid2" src="" class="video-js vjs-default-skin" preload="auto" width="640" height="360">
+    <p>Video Playback Not Supported</p>
+  </video>
+
+  <h1>Video.js Controls</h1>
+  <video id="vid3" src="" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
     <p>Video Playback Not Supported</p>
   </video>
 
@@ -47,6 +52,14 @@
       this.src("https://home.wistia.com/medias/oefj398m6q?playerColor=ff0000");
       this.play();
     });
+  });
+
+  videojs('vid3', {
+    "techOrder": ["wistia"],
+    "sources": [{
+      "type": "video/wistia",
+      "src": "https://home.wistia.com/medias/oefj398m6q?&chromeless=true"
+    }]
   });
   </script>
 </body>

@@ -39,6 +39,7 @@
       this.baseUrl = protocol + '//fast.wistia.com/embed/iframe/';
       this.videoOptions = WistiaTech.parseUrl(this.options_.source.src);
       this.videoId = this.videoOptions.videoId;
+      this.playedId = this.options_.playerId;
 
       var divWrapper = videojs.createEl('div', {
         id: this.videoId,
@@ -107,6 +108,19 @@
         self.onReady();
       });
 
+      this.wistiaVideo.embedded(function() {
+        var players = videojs.getPlayers();
+        if (players) {
+          var player = players[this.playedId];
+          if (player && player.controls()) {
+            var videos = this.player_.el_.getElementsByTagName('video');
+            if (videos.length) {
+              videos[0].style['pointerEvents'] = 'none';
+            }
+          }
+        }
+      }.bind(this));
+
       this.wistiaVideo.bind('pause', function() {
         self.onPause();
       });
@@ -141,12 +155,16 @@
       this.isReady_ = true;
       this.triggerReady();
       this.trigger('loadedmetadata');
+
       if (this.startMuted) {
         this.setMuted(true);
         this.startMuted = false;
       }
+
+      this.wistiaInfo.duration = this.wistiaVideo.duration();
     },
 
+    /* TODO: Unused? */
     onLoadProgress: function(data) {
       var durationUpdate = !this.wistiaInfo.duration;
       this.wistiaInfo.duration = data.duration;
@@ -155,6 +173,7 @@
       if (durationUpdate) this.trigger('durationchange');
     },
 
+    /* TODO: Unused? */
     onPlayProgress: function(data) {
       this.wistiaInfo.time = data.seconds;
       this.wistiaVideo.time(this.wistiaInfo.time);
@@ -267,7 +286,7 @@
 
     setVolume: function(percentAsDecimal) {
       this.wistiaInfo.volume = percentAsDecimal;
-      this.wistiaVideo.volume = percentAsDecimal;
+      this.wistiaVideo.volume(percentAsDecimal);
       this.player_.trigger('volumechange');
     },
 
@@ -331,9 +350,39 @@
         videoOptions.playerColor = playerColorMatch[1];
       }
 
+      var playbarMatch = url.match(/playbar=(true|false)/);
+      if (playbarMatch) {
+        videoOptions.playbar = playbarMatch[1];
+      }
+
+      var playButtonMatch = url.match(/playButton=(true|false)/);
+      if (playButtonMatch) {
+        videoOptions.playButton = playButtonMatch[1];
+      }
+
+      var smallPlayButtonMatch = url.match(/smallPlayButton=(true|false)/);
+      if (smallPlayButtonMatch) {
+        videoOptions.smallPlayButton = smallPlayButtonMatch[1];
+      }
+
+      var volumeControlMatch = url.match(/volumeControl=(true|false)/);
+      if (volumeControlMatch) {
+        videoOptions.volumeControl = volumeControlMatch[1];
+      }
+
+      var fullscreenButtonMatch = url.match(/fullscreenButton=(true|false)/);
+      if (fullscreenButtonMatch) {
+        videoOptions.fullscreenButton = fullscreenButtonMatch[1];
+      }
+
       var controlsVisibleMatch = url.match(/controlsVisibleOnLoad=(true|false)/);
       if(controlsVisibleMatch) {
         videoOptions.controls = controlsVisibleMatch[1];
+      }
+
+      var chromelessMatch = url.match(/chromeless=(true|false)/);
+      if (chromelessMatch) {
+        videoOptions.chromeless = chromelessMatch[1];
       }
 
       var autoPlayMatch = url.match(/autoplay=(true|false)/);
@@ -360,6 +409,30 @@
     var color = videoOptions.playerColor;
     if(color && color.substring(0, 1) === '#') {
       videoOptions.playerColor = color.substring(1);
+    }
+
+    if (videoOptions.chromeless) {
+      options['chromeless'] = videoOptions.chromeless;
+    }
+
+    if (videoOptions.playbar) {
+      options['playbar'] = videoOptions.playbar;
+    }
+
+    if (videoOptions.playButton) {
+      options['playButton'] = videoOptions.playButton;
+    }
+
+    if (videoOptions.smallPlayButton) {
+      options['smallPlayButton'] = videoOptions.smallPlayButton;
+    }
+
+    if (videoOptions.volumeControl) {
+      options['volumeControl'] = videoOptions.volumeControl;
+    }
+
+    if (videoOptions.fullscreenButton) {
+      options['fullscreenButton'] = videoOptions.fullscreenButton;
     }
 
     if(videoOptions.controls) {
