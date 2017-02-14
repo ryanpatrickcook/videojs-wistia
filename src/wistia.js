@@ -132,10 +132,6 @@
         }
       });
 
-      this.wistiaVideo.bind('volumechange', function(v) {
-        self.setVolume(v);
-      });
-
       this.wistiaVideo.bind('end', function(t) {
         self.onFinish();
       });
@@ -285,6 +281,7 @@
 
     setVolume: function(percentAsDecimal) {
       this.wistiaInfo.volume = percentAsDecimal;
+      this.wistiaInfo.muteVolume = percentAsDecimal;
       this.wistiaVideo.volume = percentAsDecimal;
       this.player_.trigger('volumechange');
     },
