@@ -1,6 +1,6 @@
 {
-  "name": "videojs-wistia-extra",
-  "version": "1.0.0",
+  "name": "videojs-wistia",
+  "version": "2.0.0",
   "main": ["vjs.wistia.js"],
   "description": "Allows you to use Wistia URL as source with Video.js.",
   "license": "MIT",
