@@ -1,6 +1,6 @@
 {
   "name": "videojs-wistia",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "description": "Allows you to use Wistia URL as source with Video.js.",
   "main": "vjs.wistia.js",
   "repository": {
