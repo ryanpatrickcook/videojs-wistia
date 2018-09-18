@@ -41,7 +41,7 @@
       this.videoId = this.videoOptions.videoId;
       this.playedId = this.options_.playerId;
 
-      var divWrapper = videojs.createEl('div', {
+      var div = videojs.createEl('div', {
         id: this.videoId,
         className: this.videoOptions.classString,
         width: this.options_.width || "100%",
@@ -52,8 +52,16 @@
         src: protocol + "//fast.wistia.com/assets/external/E-v1.js"
       });
 
-      divWrapper.insertBefore(this.wistiaScriptElement, divWrapper.firstChild);
+      var divWrapper = document.createElement('div');
+      divWrapper.setAttribute('id', 'wistia-wrapper');
+      divWrapper.appendChild(div);
 
+      var divBlocker = document.createElement('div');
+      divBlocker.setAttribute('class', 'vjs-iframe-blocker');
+      divBlocker.setAttribute('style', 'position:absolute;top:0;left:0;width:100%;height:100%');
+
+      divWrapper.appendChild(divBlocker);
+      div.insertBefore(this.wistiaScriptElement, div.firstChild);
       this.initPlayer();
 
       return divWrapper;
@@ -89,6 +97,10 @@
       };
     },
 
+    ended: function() {
+      return (this.wistiaInfo.state === WistiaState.ENDED);
+    },
+
     onLoad: function() {
       this.wistiaInfo = {
         state: WistiaState.UNSTARTED,
@@ -96,7 +108,7 @@
         muted: false,
         muteVolume: 1,
         time: 0,
-        duration: 0,
+        duration: this.wistiaVideo.duration(),
         buffered: 0,
         url: this.baseUrl + this.videoId,
         error: null
@@ -136,19 +148,12 @@
       this.wistiaVideo.bind('secondchange', function(s) {
         self.wistiaInfo.time = s;
         self.player_.trigger('timeupdate');
-
-        if( self.wistiaVideo.percentWatched() >= 1) {
-          self.onFinish();
-        }
-      });
-
-      this.wistiaVideo.bind('volumechange', function(v) {
-        self.setVolume(v);
       });
 
       this.wistiaVideo.bind('end', function(t) {
         self.onFinish();
       });
+
     },
 
     onReady: function(){
@@ -225,6 +230,19 @@
       }
 
       return { code: 'Wistia unknown error (' + this.errorNumber + ')' };
+    },
+
+    playbackRate: function() {
+      return this.suggestedRate ? this.suggestedRate : 1;
+    },
+
+    setPlaybackRate: function(suggestedRate) {
+      if (!this.wistiaVideo) {
+        return;
+      }
+      var d = this.wistiaVideo.playbackRate(suggestedRate);
+      this.suggestedRate = suggestedRate;
+      this.trigger('ratechange');
     },
 
     src: function(src) {
